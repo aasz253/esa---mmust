@@ -1,0 +1,284 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id          String   @id @default(cuid())
+  email       String   @unique
+  password    String
+  name        String
+  role        String     @default("MEMBER")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  member      Member?
+  createdPayments   Payment[]
+}
+
+model Member {
+  id                String   @id @default(cuid())
+  memberId          String   @unique
+  fullName          String
+  registrationNo    String
+  programme         String
+  year              String
+  phone            String
+  email            String
+  gender           String?
+  department       String
+  school           String?
+  academicYear     String
+  status           String @default("PENDING")
+  profilePhoto     String?
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  userId            String?  @unique
+  user              User?    @relation(fields: [userId], references: [id])
+
+  renewals          MembershipRenewal[]
+  payments          Payment[]
+  welfareContributions WelfareContribution[]
+  eventRegistrations   EventRegistration[]
+  trainingRegistrations TrainingRegistration[]
+}
+
+model MembershipRenewal {
+  id             String   @id @default(cuid())
+  member         Member   @relation(fields: [memberId], references: [id])
+  memberId       String
+  amount         Int
+  semester       String
+  academicYear   String
+  reference      String?
+  status         String @default("PENDING")
+  createdAt      DateTime @default(now())
+}
+
+model Payment {
+  id        String   @id @default(cuid())
+  reference String
+  member    Member?  @relation(fields: [memberId], references: [id])
+  memberId  String?
+  user      User?    @relation(fields: [userId], references: [id])
+  userId    String?
+  amount    Int
+  purpose   String
+  semester  String?
+  academicYear String?
+  status    String @default("PENDING")
+  createdAt DateTime @default(now())
+
+  @@index([reference])
+}
+
+model WelfareContribution {
+  id           String   @id @default(cuid())
+  member       Member   @relation(fields: [memberId], references: [id])
+  memberId     String
+  amount       Int
+  semester     String
+  academicYear String
+  reference    String?
+  status       String @default("PENDING")
+  createdAt    DateTime @default(now())
+}
+
+model WelfareCase {
+  id          String   @id @default(cuid())
+  title       String
+  memberName  String
+  category    String
+  description String
+  date        DateTime
+  requiredSupport String?
+  status      String   @default("OPEN")
+  createdAt   DateTime @default(now())
+}
+
+model Event {
+  id            String   @id @default(cuid())
+  title         String
+  slug          String   @unique
+  description   String
+  date          DateTime
+  endTime       String?
+  startTime     String
+  venue         String
+  category      String
+  coverImage    String?
+  videoUrl      String?
+  registrationLink String?
+  registrationDeadline DateTime?
+  status        String @default("UPCOMING")
+  featured      Boolean  @default(false)
+  organizer     String?
+  createdAt     DateTime @default(now())
+
+  registrations EventRegistration[]
+  media         EventMedia[]
+}
+
+model EventRegistration {
+  id        String   @id @default(cuid())
+  event     Event    @relation(fields: [eventId], references: [id])
+  eventId   String
+  member    Member   @relation(fields: [memberId], references: [id])
+  memberId  String
+  createdAt DateTime @default(now())
+}
+
+model EventMedia {
+  id      String @id @default(cuid())
+  event   Event  @relation(fields: [eventId], references: [id])
+  eventId String
+  url     String
+  type    String @default("image")
+  title   String?
+}
+
+model Announcement {
+  id        String   @id @default(cuid())
+  title     String
+  content   String
+  image     String?
+  category  String?
+  featured  Boolean  @default(false)
+  priority  Int      @default(0)
+  createdAt DateTime @default(now())
+}
+
+model Trip {
+  id          String   @id @default(cuid())
+  title       String
+  destination String
+  date        DateTime
+  description String
+  organization String?
+  location    String?
+  lessons     String?
+  coverImage  String?
+  createdAt   DateTime @default(now())
+}
+
+model Training {
+  id             String   @id @default(cuid())
+  title          String
+  slug           String   @unique
+  software       String
+  purpose        String
+  description    String
+  category       String
+  date           DateTime
+  trainer        String?
+  duration       String?
+  seats          Int?
+  certificate    Boolean  @default(false)
+  status         String   @default("UPCOMING")
+  createdAt      DateTime @default(now())
+
+  registrations  TrainingRegistration[]
+}
+
+model TrainingRegistration {
+  id         String   @id @default(cuid())
+  training   Training @relation(fields: [trainingId], references: [id])
+  trainingId String
+  member     Member   @relation(fields: [memberId], references: [id])
+  memberId   String
+  createdAt  DateTime @default(now())
+}
+
+model Product {
+  id          String  @id @default(cuid())
+  name        String
+  slug        String  @unique
+  category    String
+  description String
+  image       String?
+  gallery     String?
+  sizes       String?
+  colors      String?
+  price       Int?
+  stock       Int     @default(0)
+  featured    Boolean @default(false)
+  active      Boolean @default(true)
+  createdAt   DateTime @default(now())
+
+  variants    ProductVariant[]
+  orderItems  OrderItem[]
+}
+
+model ProductVariant {
+  id        String  @id @default(cuid())
+  product   Product @relation(fields: [productId], references: [id])
+  productId String
+  name      String
+  price     Int?
+}
+
+model Order {
+  id          String   @id @default(cuid())
+  customerName  String
+  customerPhone String
+  note        String?
+  total       Int
+  status      String   @default("PENDING")
+  createdAt   DateTime @default(now())
+
+  items       OrderItem[]
+}
+
+model OrderItem {
+  id        String  @id @default(cuid())
+  order     Order   @relation(fields: [orderId], references: [id])
+  orderId   String
+  product   Product @relation(fields: [productId], references: [id])
+  productId String
+  name      String
+  size      String?
+  color     String?
+  quantity  Int
+  price     Int
+}
+
+model Leader {
+  id        String   @id @default(cuid())
+  name      String
+  position  String
+  programme String?
+  year      String?
+  bio       String?
+  photo     String?
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+}
+
+model GalleryAlbum {
+  id        String   @id @default(cuid())
+  title     String
+  description String?
+  coverImage String?
+  createdAt DateTime @default(now())
+  media     GalleryMedia[]
+}
+
+model GalleryMedia {
+  id        String  @id @default(cuid())
+  album     GalleryAlbum? @relation(fields: [albumId], references: [id])
+  albumId   String?
+  url       String
+  type      String @default("image")
+  title     String?
+  eventId   String?
+}
+
+model Setting {
+  key   String @id
+  value String
+}

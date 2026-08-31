@@ -1,0 +1,222 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --esa-ink: #0f2a4a;
+  --esa-muted: #5b7394;
+  --esa-blue: #0047ab;
+  --esa-blue2: #1a6fd4;
+  --esa-cyan: #3aa0ff;
+  --esa-gold: #f0a500;
+  --esa-lightblue: #e8f1ff;
+  --esa-cream: #fbfcff;
+  --font-sans: var(--font-inter);
+  --font-display: var(--font-space);
+}
+
+* {
+  border-color: #dce7fa;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: #ffffff;
+  color: #0f2a4a;
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+h1, h2, h3, h4, .font-display {
+  font-family: var(--font-display);
+}
+
+/* MMUST engineering blueprint grid */
+.bg-grid {
+  background-image:
+    linear-gradient(to right, rgb(0 71 171 / 0.07) 1px, transparent 1px),
+    linear-gradient(to bottom, rgb(0 71 171 / 0.07) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+.bg-grid-dense {
+  background-image:
+    linear-gradient(to right, rgb(0 71 171 / 0.09) 1px, transparent 1px),
+    linear-gradient(to bottom, rgb(0 71 171 / 0.09) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+/* Animated variable-colour card surfaces (kept light so page stays white & text stays dark) */
+@keyframes cardShift {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.glass {
+  background: linear-gradient(120deg,
+    rgba(255, 255, 255, 0.92),
+    rgba(224, 236, 255, 0.9),
+    rgba(200, 224, 255, 0.9),
+    rgba(255, 247, 214, 0.9),
+    rgba(214, 236, 255, 0.9));
+  background-size: 300% 300%;
+  animation: cardShift 14s ease-in-out infinite;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(0, 71, 171, 0.14);
+  box-shadow: 0 10px 40px -18px rgba(0, 71, 171, 0.28);
+}
+
+.glass-strong {
+  background: linear-gradient(120deg,
+    rgba(255, 255, 255, 0.96),
+    rgba(232, 241, 255, 0.96),
+    rgba(210, 230, 255, 0.96),
+    rgba(255, 249, 224, 0.96),
+    rgba(222, 240, 255, 0.96));
+  background-size: 300% 300%;
+  animation: cardShift 18s ease-in-out infinite;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(0, 71, 171, 0.18);
+  box-shadow: 0 20px 60px -30px rgba(0, 71, 171, 0.38);
+}
+
+/* Vivid animated card background (for featured/highlight cards) - use with white text */
+.bg-animated {
+  background: linear-gradient(120deg,
+    #0047ab, #0a55c7, #1a6fd4, #3aa0ff,
+    #0a55c7, #f0a500, #1a6fd4, #0047ab);
+  background-size: 300% 300%;
+  animation: cardShift 12s ease-in-out infinite;
+}
+
+/* Animated gradient text (MMUST blue + gold) */
+.text-gradient {
+  background: linear-gradient(110deg, #0047ab 0%, #0f2a4a 40%, #1a6fd4 70%, #f0a500 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.text-gradient-gold {
+  background: linear-gradient(110deg, #0047ab, #f0a500);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Custom scrollbar (light) */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: #eef3ff;
+}
+::-webkit-scrollbar-thumb {
+  background: #b9cdfa;
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #8faef7;
+}
+
+/* Card 3D tilt */
+.tilt-card {
+  transform-style: preserve-3d;
+  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.3s;
+  will-change: transform;
+}
+
+.tilt-card:hover {
+  box-shadow: 0 30px 60px -24px rgba(0, 71, 171, 0.4), 0 0 60px -24px rgba(240, 165, 0, 0.25);
+}
+
+/* Focus states */
+:focus-visible {
+  outline: 2px solid #0047ab;
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+button:focus:not(:focus-visible) {
+  outline: none;
+}
+
+.skeleton {
+  background: linear-gradient(90deg, #eef3ff 25%, #dbe7fa 50%, #eef3ff 75%);
+  background-size: 200% 100%;
+  animation: shimmer 2s linear infinite;
+}
+
+/* Images render sharp & high-quality */
+img {
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+/* Fix: solid MMUST blue CTA buttons keep white text */
+.bg-\[#0047ab\], .bg-\[#1a6fd4\], .bg-\[#0047ab\]\/20, .bg-\[#1a6fd4\]\/20 {
+  color: #ffffff;
+}
+
+/* ---- 3D motion primitives ---- */
+
+/* Continuous 3D scrolling text colour animation */
+@keyframes textColorCycle {
+  0%   { background-position: 0% 50%; }
+  100% { background-position: 400% 50%; }
+}
+
+/* Gentle 3D floating for text */
+@keyframes textFloat {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-6px) rotateX(8deg); }
+}
+
+/* Infinite scrolling marquee */
+@keyframes marquee {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+/* 3D translate helper (preserve-3d children) */
+.translate-z-0 {
+  transform: translateZ(20px);
+}
+
+/* Continuous background colour breathing for section bands */
+@keyframes hueBreath {
+  0%, 100% { background-color: #eef4ff; }
+  50%      { background-color: #f4efff; }
+}
+
+.bg-breathe {
+  animation: hueBreath 8s ease-in-out infinite;
+}
