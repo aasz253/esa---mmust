@@ -1,6 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import { createProduct, deleteProduct } from "@/lib/actions";
 import { ServerActionForm } from "@/components/ServerActionForm";
+import { ImageUpload } from "@/components/ImageUpload";
 import { formatKsh } from "@/lib/utils";
 
 export default async function AdminProductsPage() {
@@ -23,7 +24,7 @@ export default async function AdminProductsPage() {
             <Input label="Stock" name="stock" type="number" />
             <Input label="Sizes (comma separated)" name="sizes" placeholder="S,M,L,XL" />
             <Input label="Colors (comma separated)" name="colors" placeholder="Navy, White" />
-            <Input label="Image URL" name="image" placeholder="/images/esa-logo.jpg" />
+            <ImageUpload name="image" label="Product image (from device)" />
             <label className="block">
               <span className="mb-1 block text-sm text-[#4d6a92]">Description</span>
               <textarea

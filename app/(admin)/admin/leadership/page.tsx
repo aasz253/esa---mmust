@@ -1,6 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import { createLeader, deleteLeader } from "@/lib/actions";
 import { ServerActionForm } from "@/components/ServerActionForm";
+import { ImageUpload } from "@/components/ImageUpload";
 
 export default async function AdminLeadershipPage() {
   const leaders = await prisma.leader.findMany({ orderBy: { order: "asc" } });
@@ -20,7 +21,7 @@ export default async function AdminLeadershipPage() {
             <Input label="Position" name="position" required />
             <Input label="Programme" name="programme" />
             <Input label="Year" name="year" />
-            <Input label="Photo URL" name="photo" placeholder="/images/leader-chairperson.jpg" />
+            <ImageUpload name="photo" label="Photo (from device)" />
             <label className="block">
               <span className="mb-1 block text-sm text-[#4d6a92]">Bio</span>
               <textarea

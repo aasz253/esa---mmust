@@ -235,6 +235,7 @@ export async function createAnnouncement(formData: FormData) {
       title: String(formData.get("title") || ""),
       content: String(formData.get("content") || ""),
       category: String(formData.get("category") || "General"),
+      image: String(formData.get("image") || "") || null,
       featured: formData.get("featured") === "on",
     },
   });
@@ -341,4 +342,32 @@ export async function deleteLeader(formData: FormData) {
   await prisma.leader.delete({ where: { id } });
   revalidatePath("/admin/leadership");
   revalidatePath("/leadership");
+}
+
+export async function createTrip(formData: FormData) {
+  const admin = await requireAdmin();
+  if (!admin) return;
+  await prisma.trip.create({
+    data: {
+      title: String(formData.get("title") || ""),
+      destination: String(formData.get("destination") || ""),
+      organization: String(formData.get("organization") || "") || null,
+      location: String(formData.get("location") || "") || null,
+      description: String(formData.get("description") || ""),
+      lessons: String(formData.get("lessons") || "") || null,
+      date: new Date(String(formData.get("date") || Date.now())),
+      coverImage: String(formData.get("coverImage") || "") || null,
+    },
+  });
+  revalidatePath("/admin/trips");
+  revalidatePath("/trips");
+}
+
+export async function deleteTrip(formData: FormData) {
+  const admin = await requireAdmin();
+  if (!admin) return;
+  const id = String(formData.get("id") || "");
+  await prisma.trip.delete({ where: { id } });
+  revalidatePath("/admin/trips");
+  revalidatePath("/trips");
 }

@@ -159,20 +159,27 @@ function ShaderImagePlane({
 /* ------------------------------------------------------------------ */
 /* Floating engineering chips                                          */
 /* ------------------------------------------------------------------ */
-function Chips() {
-  const items = [
-    { label: "INNOVATION", pos: [-5.5, 2.6, -2.5] as [number, number, number] },
-    { label: "LEADERSHIP", pos: [5.6, 1.8, -3] as [number, number, number] },
-    { label: "WELFARE", pos: [-5.2, -1.6, -2] as [number, number, number] },
-    { label: "COMMUNITY", pos: [5.2, -2.2, -2.8] as [number, number, number] },
-    { label: "CAREER", pos: [0.2, 3.8, -3.4] as [number, number, number] },
-  ];
+function Chips({ mobile = false }: { mobile?: boolean }) {
+  const items = mobile
+    ? [
+        { label: "INNOVATION", pos: [0, 2.4, -2.5] as [number, number, number] },
+        { label: "LEADERSHIP", pos: [0, 1.2, -3] as [number, number, number] },
+        { label: "WELFARE", pos: [0, -0.2, -2] as [number, number, number] },
+        { label: "COMMUNITY", pos: [0, -1.8, -2.8] as [number, number, number] },
+      ]
+    : [
+        { label: "INNOVATION", pos: [-5.5, 2.6, -2.5] as [number, number, number] },
+        { label: "LEADERSHIP", pos: [5.6, 1.8, -3] as [number, number, number] },
+        { label: "WELFARE", pos: [-5.2, -1.6, -2] as [number, number, number] },
+        { label: "COMMUNITY", pos: [5.2, -2.2, -2.8] as [number, number, number] },
+        { label: "CAREER", pos: [0.2, 3.8, -3.4] as [number, number, number] },
+      ];
   return (
     <>
       {items.map((c, i) => (
         <Float key={c.label} speed={1.4 + i * 0.1} floatIntensity={1.6} rotationIntensity={0.2}>
           <mesh position={c.pos}>
-            <boxGeometry args={[2.7, 0.6, 0.18]} />
+            <boxGeometry args={[2.4, 0.55, 0.18]} />
             <meshPhongMaterial
               color="#eaf2ff"
               transparent
@@ -188,13 +195,24 @@ function Chips() {
 }
 
 /* ------------------------------------------------------------------ */
-/* Background image stack                                              */
+/* Background image stack (real campus photos)                         */
 /* ------------------------------------------------------------------ */
-function ImageStack({ scrollRef }: { scrollRef: React.MutableRefObject<number> }) {
-  const images = [
-    { url: "/images/bg/innovation.jpg", pos: [4.9, 0.3, -3] as [number, number, number], scale: [2.4, 2.4, 1] as [number, number, number], depth: 0.8, speed: 0.5 },
-    { url: "/images/bg/members.jpg", pos: [-4.9, -0.2, -2.4] as [number, number, number], scale: [2.2, 2.2, 1] as [number, number, number], depth: 0.6, speed: 0.6 },
-  ];
+function ImageStack({
+  scrollRef,
+  mobile,
+}: {
+  scrollRef: React.MutableRefObject<number>;
+  mobile: boolean;
+}) {
+  const images = mobile
+    ? [
+        { url: "/images/bg/hero-1.jpg", pos: [0, 0.4, -3] as [number, number, number], scale: [4.6, 4.6, 1] as [number, number, number], depth: 0.8, speed: 0.5 },
+        { url: "/images/bg/hero-2.jpg", pos: [0, -1.6, -2.4] as [number, number, number], scale: [4.2, 4.2, 1] as [number, number, number], depth: 0.6, speed: 0.6 },
+      ]
+    : [
+        { url: "/images/bg/hero-1.jpg", pos: [4.9, 0.3, -3] as [number, number, number], scale: [2.6, 2.6, 1] as [number, number, number], depth: 0.8, speed: 0.5 },
+        { url: "/images/bg/hero-2.jpg", pos: [-4.9, -0.2, -2.4] as [number, number, number], scale: [2.4, 2.4, 1] as [number, number, number], depth: 0.6, speed: 0.6 },
+      ];
   return (
     <>
       {images.map((img, i) => (
@@ -208,6 +226,63 @@ function ImageStack({ scrollRef }: { scrollRef: React.MutableRefObject<number> }
           index={i}
           scrollRef={scrollRef}
         />
+      ))}
+    </>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/* Real ESA team photos as floating cards                              */
+/* ------------------------------------------------------------------ */
+function TeamCard({
+  url,
+  position,
+  s = 1,
+  index = 0,
+}: {
+  url: string;
+  position: [number, number, number];
+  s?: number;
+  index?: number;
+}) {
+  const tex = useTexture(url) as THREE.Texture;
+  return (
+    <Float
+      key={url}
+      speed={1.1 + index * 0.12}
+      floatIntensity={1.4}
+      rotationIntensity={0.15}
+    >
+      <mesh position={position}>
+        <planeGeometry args={[1.3 * s, 1.5 * s, 1, 1]} />
+        <meshBasicMaterial map={tex} transparent opacity={0.96} />
+      </mesh>
+      <mesh position={[position[0], position[1] - 0.02 * s, position[2] - 0.01]}>
+        <planeGeometry args={[1.34 * s, 1.54 * s, 1, 1]} />
+        <meshBasicMaterial color="#ffffff" transparent opacity={0.12} />
+      </mesh>
+    </Float>
+  );
+}
+
+function TeamImages({ mobile = false }: { mobile?: boolean }) {
+  const team = mobile
+    ? [
+        { url: "/images/leader-chairperson.jpg", pos: [-1.7, 1.6, -2.5] as [number, number, number], s: 0.7 },
+        { url: "/images/leader-vice-chairperson.jpg", pos: [1.7, 0.2, -2.8] as [number, number, number], s: 0.66 },
+        { url: "/images/leader-treasurer.jpg", pos: [-1.55, -1.7, -2.2] as [number, number, number], s: 0.6 },
+        { url: "/images/leader-organising-secretary.jpg", pos: [1.6, -1.5, -2.6] as [number, number, number], s: 0.58 },
+      ]
+    : [
+        { url: "/images/leader-chairperson.jpg", pos: [5.3, 2.2, -2.2] as [number, number, number], s: 1 },
+        { url: "/images/leader-vice-chairperson.jpg", pos: [-5.4, 1.6, -2.6] as [number, number, number], s: 0.92 },
+        { url: "/images/leader-treasurer.jpg", pos: [5.1, -1.4, -2.4] as [number, number, number], s: 0.85 },
+        { url: "/images/leader-organising-secretary.jpg", pos: [-5.2, -2, -2.3] as [number, number, number], s: 0.82 },
+      ];
+  return (
+    <>
+      {team.map((t, i) => (
+        <TeamCard key={t.url} url={t.url} position={t.pos} s={t.s} index={i} />
       ))}
     </>
   );
@@ -249,7 +324,7 @@ function Particles({ count = 500 }) {
 /* ------------------------------------------------------------------ */
 function TextRig({ mobile }: { mobile: boolean }) {
   const rig = useRef<THREE.Group>(null);
-  const s = mobile ? 0.72 : 1;
+  const s = mobile ? 0.6 : 1;
 
   // GSAP ScrollTrigger -> glide the whole text rig through 3D space
   useEffect(() => {
@@ -335,9 +410,10 @@ export default function HeroScene({ mobile = false }: { mobile?: boolean }) {
       <directionalLight position={[-6, -4, 4]} intensity={0.6} color="#3aa0ff" />
       <pointLight position={[6, 4, 6]} intensity={0.9} color="#f0a500" />
 
-      <ImageStack scrollRef={scrollRef} />
+      <ImageStack scrollRef={scrollRef} mobile={mobile} />
       <Particles count={mobile ? 250 : 500} />
-      <Chips />
+      <Chips mobile={mobile} />
+      <TeamImages mobile={mobile} />
       <TextRig mobile={mobile} />
     </Canvas>
   );

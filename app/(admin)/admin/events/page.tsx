@@ -1,6 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import { createEvent, deleteEvent } from "@/lib/actions";
 import { ServerActionForm } from "@/components/ServerActionForm";
+import { ImageUpload } from "@/components/ImageUpload";
 import { formatDate } from "@/lib/utils";
 
 export default async function AdminEventsPage() {
@@ -33,7 +34,7 @@ export default async function AdminEventsPage() {
             <Input name="startTime" label="Start time" placeholder="10:00 AM" />
             <Input name="endTime" label="End time" placeholder="4:00 PM" />
             <Input name="venue" label="Venue" placeholder="MMUST Main Campus" />
-            <Input name="coverImage" label="Cover image URL (optional)" placeholder="/images/event.jpg" />
+            <ImageUpload name="coverImage" label="Cover image (from device)" />
             <Input name="organizer" label="Organizer" placeholder="ESA MMUST" />
             <label className="block">
               <span className="mb-1 block text-sm text-[#4d6a92]">Description</span>

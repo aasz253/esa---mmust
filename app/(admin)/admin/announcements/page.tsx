@@ -1,6 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import { createAnnouncement, deleteAnnouncement } from "@/lib/actions";
 import { ServerActionForm } from "@/components/ServerActionForm";
+import { ImageUpload } from "@/components/ImageUpload";
 import { formatDate } from "@/lib/utils";
 
 export default async function AdminAnnouncementsPage() {
@@ -50,6 +51,7 @@ export default async function AdminAnnouncementsPage() {
               <input type="checkbox" name="featured" className="accent-[#3aa0ff]" />
               Featured (appears at top)
             </label>
+            <ImageUpload name="image" label="Image (from device, optional)" />
           </ServerActionForm>
         </div>
 

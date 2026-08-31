@@ -10,6 +10,7 @@ import {
   Shirt,
   HeartHandshake,
   UserRound,
+  Bus,
   ArrowLeft,
   LogOut,
 } from "lucide-react";
@@ -25,6 +26,7 @@ const nav = [
       { href: "/admin/events", label: "Events", icon: CalendarDays },
       { href: "/admin/announcements", label: "Announcements", icon: Megaphone },
       { href: "/admin/training", label: "Training", icon: MonitorCog },
+      { href: "/admin/trips", label: "Trips", icon: Bus },
       { href: "/admin/products", label: "Merchandise", icon: Shirt },
       { href: "/admin/welfare", label: "Welfare", icon: HeartHandshake },
       { href: "/admin/leadership", label: "Leadership", icon: UserRound },

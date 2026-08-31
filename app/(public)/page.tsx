@@ -486,6 +486,14 @@ export default async function HomePage() {
               {announcements.slice(0, 3).map((a) => (
                 <StaggerItem key={a.id}>
                   <div className="glass flex items-start gap-4 rounded-2xl p-5">
+                    {a.image && (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img
+                        src={a.image}
+                        alt={a.title}
+                        className="h-12 w-12 shrink-0 rounded-xl object-cover"
+                      />
+                    )}
                     <span className="mt-1 rounded-xl bg-[#f0a500]/15 p-2.5 text-[#d99a00]">
                       <Star size={18} />
                     </span>
